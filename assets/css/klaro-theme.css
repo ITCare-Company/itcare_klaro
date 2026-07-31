@@ -17,4 +17,10 @@
   --klaro-button-border-hover: 1px solid var(--wsPartnerColor, #333333);
   --font-family: 'Ubuntu', sans-serif;
   --title-font-family: 'Ubuntu', sans-serif;
+
+  /* Default dialog focus outline is "auto", i.e. the browser's native
+     black/white focus ring, not a themed one. Buttons already default to
+     --klaro-primary-color on focus, but make it explicit here too. */
+  --klaro-dialog-focus-outline: 2px solid var(--klaro-primary-color);
+  --klaro-button-focus-outline: 2px solid var(--klaro-primary-color);
 }
