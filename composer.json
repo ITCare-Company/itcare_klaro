@@ -1,0 +1,9 @@
+{
+    "name": "itcare-company/itcare_klaro",
+    "description": "Installs and configures Klaro! consent manager for Google Tag Manager / GA4, themed to match the site colorway.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "drupal/klaro": "^3.0"
+    }
+}

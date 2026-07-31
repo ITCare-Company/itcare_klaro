@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Hooks for the itcare_klaro module.
+ */
+
+/**
+ * Implements hook_page_attachments().
+ */
+function itcare_klaro_page_attachments(array &$attachments): void {
+  $attachments['#attached']['library'][] = 'itcare_klaro/klaro_theme';
+}

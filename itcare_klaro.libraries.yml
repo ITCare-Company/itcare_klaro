@@ -1,0 +1,7 @@
+klaro_theme:
+  version: 1.0
+  css:
+    theme:
+      assets/css/klaro-theme.css: {}
+  dependencies:
+    - klaro/klaro-override

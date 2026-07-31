@@ -1,0 +1,7 @@
+name: 'ITCare Klaro'
+type: module
+description: 'Installs and configures Klaro! consent manager for Google Tag Manager / GA4, themed to match the site colorway.'
+package: ITCare
+core_version_requirement: ^10.2 || ^11
+dependencies:
+  - klaro:klaro

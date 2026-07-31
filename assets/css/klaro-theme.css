@@ -1,0 +1,14 @@
+/**
+ * Re-theme the Klaro consent widget to match the active small_y colorway
+ * (--wsPrimaryColor/--wsPartnerColor, provided by the site's colorway
+ * module) and the site's Ubuntu font instead of Klaro's default navy blue.
+ */
+.klaro {
+  --klaro-primary-color: var(--wsPrimaryColor, #FCAF17);
+  --klaro-button-text-color: var(--wsPartnerColor, #333333);
+  --klaro-button-bg-hover: var(--wsPartnerColor, #333333);
+  --klaro-button-text-color-hover: #fff;
+  --klaro-button-border-hover: 3px solid var(--wsPartnerColor, #333333);
+  --font-family: 'Ubuntu', sans-serif;
+  --title-font-family: 'Ubuntu', sans-serif;
+}

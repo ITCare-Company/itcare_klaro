@@ -1,0 +1,70 @@
+<?php
+
+/**
+ * @file
+ * Install functions for the itcare_klaro module.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * Klaro is installed automatically first (declared as a dependency in
+ * itcare_klaro.info.yml), so its shipped default config already exists by
+ * the time this runs.
+ */
+function itcare_klaro_install(): void {
+  _itcare_klaro_configure();
+}
+
+/**
+ * Configure Klaro's dialog and the Google Tag Manager / GA4 app.
+ *
+ * Fixes two bugs in Klaro's own shipped default config for the
+ * gtm_consent_mode app:
+ * - Empty cookies list, so Klaro has nothing to delete when a visitor
+ *   declines and a GA cookie was already set.
+ * - on_accept only pushes a dataLayer event, it never actually grants
+ *   Google Consent Mode v2, so gtag.js keeps analytics_storage denied and
+ *   never sets real cookies even after the user accepts.
+ */
+function _itcare_klaro_configure(): void {
+  // The consent banner only renders for roles holding "use klaro".
+  user_role_grant_permissions('anonymous', ['use klaro']);
+  user_role_grant_permissions('authenticated', ['use klaro']);
+
+  $host = \Drupal::request()->getHost();
+
+  \Drupal::configFactory()->getEditable('klaro.settings')
+    ->set('dialog_mode', 'notice')
+    ->set('show_notice_title', TRUE)
+    ->set('deletable_cookie_domains', ['.' . $host])
+    ->save();
+
+  \Drupal::configFactory()->getEditable('klaro.klaro_app.gtm_consent_mode')
+    ->set('status', TRUE)
+    ->set('purposes', ['analytics'])
+    ->set('required', FALSE)
+    // Domain is intentionally omitted (not even an empty string): an empty
+    // string is sent to Klaro's JS as an explicit "domain=;" deletion
+    // attempt, which browsers ignore, and it also suppresses Klaro's own
+    // "."+hostname fallback attempt (that fallback only fires when domain
+    // is fully undefined).
+    ->set('cookies', [
+      ['regex' => '^_ga(_.*)?', 'path' => ''],
+      ['regex' => '^_gid', 'path' => ''],
+      ['regex' => '^_gat(_.*)?', 'path' => ''],
+    ])
+    ->set('on_accept', "window.dataLayer = window.dataLayer || [];\nwindow.gtag = window.gtag || function(){dataLayer.push(arguments)};\ngtag('consent', 'update', {'analytics_storage': 'granted'});\nfor (let key of Object.keys(opts.consents)) {\n  if (opts.consents[key]) {\n    dataLayer.push({'event': 'klaro-' + key + '-accepted'});\n  }\n}")
+    ->set('on_decline', "window.dataLayer = window.dataLayer || [];\nwindow.gtag = window.gtag || function(){dataLayer.push(arguments)};\ngtag('consent', 'update', {'analytics_storage': 'denied'});")
+    ->save();
+
+  \Drupal::messenger()->addStatus(t('Klaro cookie consent manager configured for Google Tag Manager / Google Analytics 4.'));
+}
+
+/**
+ * Re-apply Klaro config (idempotent) for sites that installed an earlier
+ * version of this module before the cookie/consent-mode fixes existed.
+ */
+function itcare_klaro_update_10001(): void {
+  _itcare_klaro_configure();
+}
