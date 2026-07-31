@@ -24,3 +24,22 @@
   --klaro-dialog-focus-outline: 2px solid var(--klaro-primary-color);
   --klaro-button-focus-outline: 2px solid var(--klaro-primary-color);
 }
+
+/*
+ * klaro-override.css sets the variables above but its own :focus rule
+ * doesn't reliably win the cascade against theme/browser focus styles, so
+ * the native black/white outline still shows through. Target the real
+ * elements directly instead of relying on the variable indirection.
+ */
+.klaro .cm-btn:focus,
+.klaro .cm-btn:focus-visible {
+  outline: 2px solid var(--klaro-primary-color) !important;
+  outline-offset: 2px !important;
+}
+
+.klaro .cookie-notice:focus,
+.klaro .cookie-notice:focus-visible,
+.klaro .cm-modal.cm-klaro:focus,
+.klaro .cm-modal.cm-klaro:focus-visible {
+  outline: 2px solid var(--klaro-primary-color) !important;
+}
