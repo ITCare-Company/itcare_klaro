@@ -8,7 +8,13 @@
   --klaro-button-text-color: var(--wsPartnerColor, #333333);
   --klaro-button-bg-hover: var(--wsPartnerColor, #333333);
   --klaro-button-text-color-hover: #fff;
-  --klaro-button-border-hover: 3px solid var(--wsPartnerColor, #333333);
+  /* Default border is 3px solid the primary color, same as the button's own
+     background, which just reads as a clunky thick edge on a filled button.
+     Match it to the background so it disappears in the base state and only
+     shows as a real outline on hover, once the bg switches to the partner
+     color. */
+  --klaro-button-border: 1px solid var(--klaro-primary-color);
+  --klaro-button-border-hover: 1px solid var(--wsPartnerColor, #333333);
   --font-family: 'Ubuntu', sans-serif;
   --title-font-family: 'Ubuntu', sans-serif;
 }
