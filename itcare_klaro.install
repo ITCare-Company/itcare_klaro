@@ -38,11 +38,14 @@ function _itcare_klaro_configure(): void {
     ->set('dialog_mode', 'notice')
     ->set('show_notice_title', TRUE)
     ->set('deletable_cookie_domains', ['.' . $host])
-    // library.accept_all=false meant the notice's "Accept" button only
-    // saved whichever services were individually toggled on (all off by
+    // library.accept_all=false meant the notice's single button only saved
+    // whichever services were individually toggled on (all off by
     // default), so clicking it did not actually turn cookies on. Turning
-    // this on makes that button truly accept every listed service and
-    // renders it labelled "Accept all" (klaro.texts:acceptAll).
+    // this on makes that same button call changeAll(true) instead. Note:
+    // the simple notice bar always uses the "ok" text label for this
+    // button regardless of accept_all (the dedicated "Accept all" label
+    // only exists in the full Customize modal), so the label is renamed
+    // separately below via klaro.texts:ok.
     ->set('library.accept_all', TRUE)
     ->save();
 
@@ -71,6 +74,10 @@ function _itcare_klaro_configure(): void {
     ->set('consentModal.title', 'Personal data and cookies')
     ->set('consentNotice.title', 'Personal data and cookies')
     ->set('consentModal.privacyPolicy.url', 'internal:/privacy-policy')
+    // The simple notice bar's single accept button always uses this "ok"
+    // label (its own "Accept all" text/class only exists in the Customize
+    // modal), so rename it directly to match what the button now does.
+    ->set('ok', 'Accept all')
     ->save();
 
   \Drupal::messenger()->addStatus(t('Klaro cookie consent manager configured for Google Tag Manager / Google Analytics 4.'));
@@ -88,5 +95,12 @@ function itcare_klaro_update_10001(): void {
  * Re-apply Klaro config: accept-all button, title text, privacy policy link.
  */
 function itcare_klaro_update_10002(): void {
+  _itcare_klaro_configure();
+}
+
+/**
+ * Re-apply Klaro config: rename the notice's accept button to "Accept all".
+ */
+function itcare_klaro_update_10003(): void {
   _itcare_klaro_configure();
 }
