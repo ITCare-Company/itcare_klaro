@@ -38,6 +38,12 @@ function _itcare_klaro_configure(): void {
     ->set('dialog_mode', 'notice')
     ->set('show_notice_title', TRUE)
     ->set('deletable_cookie_domains', ['.' . $host])
+    // library.accept_all=false meant the notice's "Accept" button only
+    // saved whichever services were individually toggled on (all off by
+    // default), so clicking it did not actually turn cookies on. Turning
+    // this on makes that button truly accept every listed service and
+    // renders it labelled "Accept all" (klaro.texts:acceptAll).
+    ->set('library.accept_all', TRUE)
     ->save();
 
   \Drupal::configFactory()->getEditable('klaro.klaro_app.gtm_consent_mode')
@@ -58,6 +64,15 @@ function _itcare_klaro_configure(): void {
     ->set('on_decline', "window.dataLayer = window.dataLayer || [];\nwindow.gtag = window.gtag || function(){dataLayer.push(arguments)};\ngtag('consent', 'update', {'analytics_storage': 'denied'});")
     ->save();
 
+  // Feedback from QA: drop the redundant "Use of" from the banner/modal
+  // title, and point "privacy policy" at the site's actual page instead of
+  // the shipped default (front page).
+  \Drupal::configFactory()->getEditable('klaro.texts')
+    ->set('consentModal.title', 'Personal data and cookies')
+    ->set('consentNotice.title', 'Personal data and cookies')
+    ->set('consentModal.privacyPolicy.url', 'internal:/privacy-policy')
+    ->save();
+
   \Drupal::messenger()->addStatus(t('Klaro cookie consent manager configured for Google Tag Manager / Google Analytics 4.'));
 }
 
@@ -66,5 +81,12 @@ function _itcare_klaro_configure(): void {
  * version of this module before the cookie/consent-mode fixes existed.
  */
 function itcare_klaro_update_10001(): void {
+  _itcare_klaro_configure();
+}
+
+/**
+ * Re-apply Klaro config: accept-all button, title text, privacy policy link.
+ */
+function itcare_klaro_update_10002(): void {
   _itcare_klaro_configure();
 }
