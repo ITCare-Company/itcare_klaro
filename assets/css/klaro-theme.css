@@ -1,10 +1,22 @@
 /**
  * Re-theme the Klaro consent widget to match the active site colorway
  * instead of Klaro's default navy blue, and use the site's Ubuntu font.
- * Different sites/themes expose the brand color under different variable
- * names (--wsPrimaryColor from itcare_colorway, --primary/--secondary from
- * openy_carnation's own Bootstrap-style vars), so fall through several
- * before landing on a hardcoded default.
+ *
+ * There are two distinct theming modes on openy_carnation, not one:
+ * - Layout Builder mode (page-with-lb body class), colors driven by
+ *   whichever LB colorway library is attached (y_lb's own colorway-*.css,
+ *   ws_small_y's small-y-colorway-*.css, or a custom one like
+ *   itcare_colorway's colorway-yellow.css). All of these, regardless of
+ *   which one, set --wsPrimaryColor/--wsPartnerColor on :root — that's
+ *   the actual switcher, not something we detect ourselves.
+ * - Legacy (non-LB) carnation: no colorway library is attached, so those
+ *   --ws* properties are simply undefined, and the theme's own Bootstrap
+ *   vars --primary/--secondary are what's actually driving the page.
+ *
+ * The var() fallback below relies on the CSS cascade to pick whichever
+ * one is actually defined for the current mode (undefined custom
+ * properties fall through to the next argument), rather than us trying to
+ * detect the mode in PHP/JS and branch on it.
  */
 .klaro {
   --klaro-primary-color: var(--wsPrimaryColor, var(--primary, #FCAF17));
