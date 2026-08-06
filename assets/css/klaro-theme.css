@@ -8,7 +8,11 @@
  */
 .klaro {
   --klaro-primary-color: var(--wsPrimaryColor, var(--primary, #FCAF17));
-  --klaro-button-text-color: var(--wsPartnerColor, var(--secondary, #333333));
+  /* Text color on the filled button must stay a plain, fixed white: it was
+     previously tied to --wsPartnerColor/--secondary, which on some sites
+     (e.g. sfymca.org) is the same dark blue used for links, so the button
+     label looked like a link sitting on a colored box instead of a button. */
+  --klaro-button-text-color: #fff;
   --klaro-button-bg-hover: var(--wsPartnerColor, var(--secondary, #333333));
   --klaro-button-text-color-hover: #fff;
   /* Default border is 3px solid the primary color, same as the button's own
