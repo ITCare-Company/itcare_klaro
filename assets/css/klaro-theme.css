@@ -1,12 +1,15 @@
 /**
- * Re-theme the Klaro consent widget to match the active small_y colorway
- * (--wsPrimaryColor/--wsPartnerColor, provided by the site's colorway
- * module) and the site's Ubuntu font instead of Klaro's default navy blue.
+ * Re-theme the Klaro consent widget to match the active site colorway
+ * instead of Klaro's default navy blue, and use the site's Ubuntu font.
+ * Different sites/themes expose the brand color under different variable
+ * names (--wsPrimaryColor from itcare_colorway, --primary/--secondary from
+ * openy_carnation's own Bootstrap-style vars), so fall through several
+ * before landing on a hardcoded default.
  */
 .klaro {
-  --klaro-primary-color: var(--wsPrimaryColor, #FCAF17);
-  --klaro-button-text-color: var(--wsPartnerColor, #333333);
-  --klaro-button-bg-hover: var(--wsPartnerColor, #333333);
+  --klaro-primary-color: var(--wsPrimaryColor, var(--primary, #FCAF17));
+  --klaro-button-text-color: var(--wsPartnerColor, var(--secondary, #333333));
+  --klaro-button-bg-hover: var(--wsPartnerColor, var(--secondary, #333333));
   --klaro-button-text-color-hover: #fff;
   /* Default border is 3px solid the primary color, same as the button's own
      background, which just reads as a clunky thick edge on a filled button.
@@ -14,7 +17,7 @@
      shows as a real outline on hover, once the bg switches to the partner
      color. */
   --klaro-button-border: 1px solid var(--klaro-primary-color);
-  --klaro-button-border-hover: 1px solid var(--wsPartnerColor, #333333);
+  --klaro-button-border-hover: 1px solid var(--wsPartnerColor, var(--secondary, #333333));
   --font-family: 'Ubuntu', sans-serif;
   --title-font-family: 'Ubuntu', sans-serif;
 
