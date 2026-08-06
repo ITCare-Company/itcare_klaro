@@ -13,6 +13,7 @@
      (e.g. sfymca.org) is the same dark blue used for links, so the button
      label looked like a link sitting on a colored box instead of a button. */
   --klaro-button-text-color: #fff;
+  --klaro-button-font-weight: 700;
   --klaro-button-bg-hover: var(--wsPartnerColor, var(--secondary, #333333));
   --klaro-button-text-color-hover: #fff;
   /* Default border is 3px solid the primary color, same as the button's own
